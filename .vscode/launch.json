@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "1. Console App",
+            "request": "launch",
+            "mainClass": "com.findr.Main",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
+            "name": "2. Web Server (open http://localhost:8080)",
+            "request": "launch",
+            "mainClass": "com.findr.ServerMain",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
+            "name": "3. Run Tests",
+            "request": "launch",
+            "mainClass": "com.findr.test.TestRunner",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

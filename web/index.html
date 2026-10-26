@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FINDR – Campus Lost &amp; Found</title>
+<style>
+:root{--bg:#0b0b0c;--panel:#151517;--line:#2a2a2e;--tx:#f4f4f2;--mut:#9a9aa0;--ac:#d6ff3d;--acx:#0b0b0c;--bad:#ff6b5e;--hl:#d6ff3d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f4f0;--panel:#fff;--line:#dcdcd4;--tx:#0b0b0c;--mut:#62626a;--ac:#0b0b0c;--acx:#d6ff3d;--hl:#4f7300;color-scheme:light}}
+:root[data-theme="dark"]{--bg:#0b0b0c;--panel:#151517;--line:#2a2a2e;--tx:#f4f4f2;--mut:#9a9aa0;--ac:#d6ff3d;--acx:#0b0b0c;--hl:#d6ff3d}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:16px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;display:flex;align-items:center;justify-content:space-between;padding:16px 5vw;background:var(--bg);border-bottom:1px solid var(--line)}
+.logo{font-weight:900;letter-spacing:.18em;font-size:18px}.logo i{color:var(--hl);font-style:normal}
+nav div{display:flex;gap:6px;flex-wrap:wrap}
+nav a{color:var(--mut);text-decoration:none;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;border-radius:99px}
+nav a.on,nav a:hover{color:var(--acx);background:var(--ac)}
+section{display:none;padding:0 5vw 80px;max-width:1280px;margin:auto}section.on{display:block}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.17;background:var(--hl);will-change:transform}
+.bg i:nth-child(1){width:46vmax;height:46vmax;left:-12vmax;top:-10vmax;animation:b1 18s ease-in-out infinite alternate}
+.bg i:nth-child(2){width:38vmax;height:38vmax;right:-10vmax;top:28vh;background:#5b6cff;animation:b2 24s ease-in-out infinite alternate}
+.bg i:nth-child(3){width:34vmax;height:34vmax;left:30vw;bottom:-16vmax;animation:b3 21s ease-in-out infinite alternate}
+@keyframes b1{to{transform:translate(32vw,24vh) scale(1.25)}}
+@keyframes b2{to{transform:translate(-30vw,-18vh) scale(.8)}}
+@keyframes b3{to{transform:translate(-26vw,-30vh) scale(1.3)}}
+section,footer{position:relative;z-index:1}
+section.on{animation:in .55s ease both}
+@keyframes in{from{opacity:0;transform:translateY(18px)}}
+@media (prefers-reduced-motion:reduce){.bg i,section.on,.marq span{animation:none}}
+.hero{padding:9vh 0 6vh}
+.tag{color:var(--hl);font-size:12px;letter-spacing:.25em;text-transform:uppercase}
+h1{font-size:clamp(44px,11vw,150px);line-height:.92;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;margin:18px 0 26px}
+h1 em{font-style:normal;color:var(--hl)}
+.lead{max-width:560px;color:var(--mut);font-size:18px}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--ac);color:var(--acx);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:15px 26px;border-radius:99px;text-decoration:none;margin:28px 10px 0 0}
+.btn.ghost{background:none;color:var(--tx);border:1px solid var(--line)}
+.marq{overflow:hidden;border-block:1px solid var(--line);padding:14px 0;white-space:nowrap;margin:0 -5vw}
+.marq span{display:inline-block;font-size:26px;font-weight:900;text-transform:uppercase;color:var(--line);animation:m 22s linear infinite}
+@keyframes m{to{transform:translateX(-50%)}}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:50px 0}
+.stats div{background:var(--bg);padding:30px}.stats b{display:block;font-size:56px;font-weight:900;color:var(--hl);line-height:1}
+.stats small{color:var(--mut);text-transform:uppercase;letter-spacing:.15em;font-size:12px}
+h2{font-size:clamp(32px,6vw,72px);text-transform:uppercase;font-weight:900;letter-spacing:-.02em;line-height:1;margin:6vh 0 24px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px}
+.card .n{color:var(--hl);font-weight:900;font-size:14px;letter-spacing:.2em}
+.card h3{font-size:22px;margin:8px 0}.card p{color:var(--mut);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.pill{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mut)}
+.pill.lost{color:var(--bad);border-color:var(--bad)}.pill.found{color:var(--hl);border-color:var(--hl)}
+.meta{color:var(--mut);font-size:13px;margin:8px 0}.who{font-size:13px;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.acts button{font-family:inherit;font-weight:600;font-size:11px;background:none;color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:7px 12px;cursor:pointer;text-transform:uppercase;letter-spacing:.08em}
+.acts button:hover{border-color:var(--hl);color:var(--hl)}
+form,.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:10px}
+label{font-size:12px;color:var(--mut);letter-spacing:.1em;text-transform:uppercase;display:block}
+input,select,textarea{width:100%;margin-top:6px;background:var(--panel);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:13px;font:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ac)}
+.full{grid-column:1/-1}.err{color:var(--bad);font-size:12px;min-height:14px;display:block;margin-top:4px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:4px;margin:10px 0}
+.seg button{border:0;background:none;color:var(--mut);padding:10px 22px;border-radius:99px;cursor:pointer;font-family:inherit;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.seg button.on{background:var(--ac);color:var(--acx)}
+.score{font-size:46px;font-weight:900;color:var(--hl);line-height:1}.bar{height:6px;background:var(--line);border-radius:9px;margin:10px 0}.bar i{display:block;height:100%;background:var(--ac);border-radius:9px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}.pair div{font-size:13px;color:var(--mut)}.pair b{color:var(--tx);display:block;font-size:16px}
+.empty{color:var(--mut);padding:40px;text-align:center;border:1px dashed var(--line);border-radius:20px;grid-column:1/-1}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--ac);color:var(--acx);padding:14px 24px;border-radius:99px;font-weight:700;transition:.3s;z-index:20;max-width:90vw}
+#toast.show{transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);color:var(--mut);padding:50px 5vw 30px;font-size:14px;margin-top:40px}
+.ft{max-width:1280px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px}
+.ft h4{color:var(--tx);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+.ft p{margin:5px 0}.ft a{color:var(--tx);text-decoration:none;border-bottom:1px solid var(--line)}.ft a:hover{color:var(--hl);border-color:var(--hl)}
+.quote{max-width:1280px;margin:44px auto 0;text-align:center;font-size:clamp(18px,3vw,28px);font-weight:700;color:var(--tx);letter-spacing:-.01em}
+.quote::before{content:"";display:block;width:48px;height:3px;background:var(--hl);margin:0 auto 18px}
+.ft p{overflow-wrap:anywhere}
+.copy{max-width:1280px;margin:36px auto 0;padding-top:18px;border-top:1px solid var(--line);font-size:12px}
+</style>
+</head>
+<body>
+<div class="bg"><i></i><i></i><i></i></div>
+<nav><span class="logo">FIND<i>R</i></span>
+<div id="links"><a href="#home">Home</a><a href="#report">Report</a><a href="#browse">Browse</a><a href="#matches">Matches</a></div></nav>
+
+<section id="home">
+ <div class="hero"><span class="tag">Campus Lost &amp; Found Matching System</span>
+ <h1>Lost it?<br><em>We’ll match it.</em></h1>
+ <p class="lead">Report what you lost or found. Our scoring engine compares category, place, date and description, then connects the owner with the finder.</p>
+ <a class="btn" href="#report">Report an item</a><a class="btn ghost" href="#matches">See matches</a></div>
+ <div class="marq"><span>Lost · Found · Matched · Returned · Lost · Found · Matched · Returned · Lost · Found · Matched · Returned · Lost · Found · Matched · Returned · Lost · Found · Matched · Returned · Lost · Found · Matched · Returned · Lost · Found · Matched · Returned · Lost · Found · Matched · Returned ·&nbsp;</span></div>
+ <div class="stats"><div><b id="s1">0</b><small>Items lost</small></div><div><b id="s2">0</b><small>Items found</small></div><div><b id="s3">0</b><small>Possible matches</small></div><div><b id="s4">0</b><small>Returned</small></div></div>
+ <h2>How it works</h2>
+ <div class="steps">
+ <div class="card"><span class="n">01</span><h3>Report</h3><p>Fill a short form for a lost or found item with place, date and description.</p></div>
+ <div class="card"><span class="n">02</span><h3>Match</h3><p>Every pair scores out of 100: category 30, location 20, date 20, description 30.</p></div>
+ <div class="card"><span class="n">03</span><h3>Return</h3><p>Pairs scoring 60 or more show contact details so the item can go home.</p></div></div>
+</section>
+
+<section id="report">
+ <h2>Report an item</h2>
+ <div class="seg"><button id="bl" class="on">I lost something</button><button id="bf">I found something</button></div>
+ <form id="f" novalidate></form>
+</section>
+
+<section id="browse">
+ <h2>Browse &amp; search</h2>
+ <div class="filters">
+  <label>Type<select id="ft"><option value="both">Lost + Found</option><option value="lost">Lost only</option><option value="found">Found only</option></select></label>
+  <label>Category<select id="fc"></select></label>
+  <label>Location<input id="fl" placeholder="e.g. Library"></label>
+  <label>Keyword<input id="fk" placeholder="e.g. wallet"></label></div>
+ <div class="grid" id="list" style="margin-top:24px"></div>
+</section>
+
+<section id="matches">
+ <h2>Possible matches</h2>
+ <label style="max-width:420px">Show matches for<select id="ms"></select></label>
+ <div class="grid" id="mlist" style="margin-top:24px"></div>
+</section>
+
+<footer>
+ <div class="ft">
+  <div><h4>About FINDR</h4><p>A campus Lost &amp; Found matching system that compares category, location, date and description to reunite items with their owners.</p></div>
+  <div><h4>Made by</h4><p><b style="color:var(--tx)">Akshat Singh</b></p><p>B.Tech 2nd Year Student</p><p>Manipal University Jaipur</p></div>
+  <div><h4>Contact us</h4><p>Phone: <a href="tel:+918881992292">+91 88819 92292</a></p><p>Email: <a href="mailto:officialakshatsingh0110@gmail.com">officialakshatsingh0110@gmail.com</a></p></div>
+ </div>
+ <div class="quote">“Every lost item is a small story waiting to be returned.”</div>
+ <div class="copy">© 2026 FINDR · College project · <span id="mode">Checking server…</span></div>
+</footer>
+<div id="toast"></div>
+
+<script>
+const CATS=["Electronics","Accessories","Stationery","Books","Personal","Clothing","Cards","Other"];
+const SAMPLE=[
+{t:"lost",id:"L1",name:"Black Wallet",cat:"Accessories",desc:"black leather wallet with student ID card",loc:"Library",date:"2026-10-20",st:"ACTIVE",p1:"Aarav Sharma",p2:"9876543210"},
+{t:"lost",id:"L2",name:"iPhone 13",cat:"Electronics",desc:"blue iphone with cracked back cover",loc:"Canteen",date:"2026-10-21",st:"ACTIVE",p1:"Ananya Verma",p2:"ananya@college.edu"},
+{t:"lost",id:"L3",name:"Water Bottle",cat:"Personal",desc:"steel silver bottle with sticker",loc:"Hostel Block A",date:"2026-10-18",st:"ACTIVE",p1:"Rahul Meena",p2:"9812345678"},
+{t:"lost",id:"L4",name:"Calculator",cat:"Stationery",desc:"casio scientific calculator black",loc:"Exam Hall 2",date:"2026-10-22",st:"ACTIVE",p1:"Priya Singh",p2:"9898989898"},
+{t:"found",id:"F1",name:"Wallet",cat:"Accessories",desc:"black leather wallet with id card inside",loc:"Library",date:"2026-10-21",st:"ACTIVE",p1:"Security Desk",p2:"Security Office"},
+{t:"found",id:"F2",name:"Mobile Phone",cat:"Electronics",desc:"blue iphone cracked cover",loc:"Canteen",date:"2026-10-22",st:"ACTIVE",p1:"Kiran Das",p2:"Admin Block"},
+{t:"found",id:"F3",name:"Umbrella",cat:"Personal",desc:"red folding umbrella",loc:"Main Gate",date:"2026-10-19",st:"ACTIVE",p1:"Security Desk",p2:"Security Office"},
+{t:"found",id:"F4",name:"Scientific Calculator",cat:"Stationery",desc:"casio calculator black colour",loc:"Exam Hall 2",date:"2026-10-23",st:"ACTIVE",p1:"Invigilator",p2:"Exam Cell"}];
+let items;
+try{items=JSON.parse(localStorage.getItem("findr"))}catch(e){items=null}
+if(!Array.isArray(items)||!items.length)items=JSON.parse(JSON.stringify(SAMPLE));
+const save=()=>{try{localStorage.setItem("findr",JSON.stringify(items))}catch(e){}};
+/* ---- Java backend connection (falls back to offline demo mode if the server is not running) ---- */
+const API=(location.port==="8080")?"":"http://localhost:8080";
+let online=false,srvMatches=[];
+async function sync(){
+ try{const r=await fetch(API+"/api/state");if(!r.ok)throw 0;const d=await r.json();items=d.items;srvMatches=d.matches;online=true}
+ catch(e){online=false}
+ const m=document.querySelector("#mode");if(m)m.textContent=online?"Connected to Java backend":"Offline demo mode (data stays in this browser)"}
+async function api(method,path,body){
+ const r=await fetch(API+path,{method,headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined});
+ const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||"Request failed");return d}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800)}
+
+/* ---- matching engine (same rules as the Java MatchingEngine) ---- */
+const STOP=new Set("a an the is with and of in on at to has have inside it".split(" "));
+const words=s=>new Set(s.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w&&!STOP.has(w)));
+function score(l,f){
+ let s=0;
+ if(l.cat.toLowerCase()===f.cat.toLowerCase())s+=30;
+ if(l.loc.toLowerCase()===f.loc.toLowerCase())s+=20;
+ const gap=Math.abs(Date.parse(l.date)-Date.parse(f.date))/864e5;
+ if(gap<=2)s+=20;else if(gap<=7)s+=10;
+ const a=words(l.desc+" "+l.name),b=words(f.desc+" "+f.name);
+ const common=[...a].filter(w=>b.has(w)).length,all=new Set([...a,...b]).size;
+ if(all)s+=Math.round(30*common/all);
+ return s}
+function matchesFor(l){
+ if(online)return srvMatches.filter(m=>m.l===l.id).map(m=>({l,f:items.find(i=>i.id===m.f),s:m.s})).filter(m=>m.f).sort((x,y)=>y.s-x.s);
+ return items.filter(f=>f.t==="found"&&f.st==="ACTIVE").map(f=>({l,f,s:score(l,f)})).filter(m=>m.s>=60).sort((x,y)=>y.s-x.s)}
+function allMatches(){
+ if(online)return srvMatches.map(m=>({l:items.find(i=>i.id===m.l),f:items.find(i=>i.id===m.f),s:m.s})).filter(m=>m.l&&m.f).sort((x,y)=>y.s-x.s);
+ return items.filter(i=>i.t==="lost"&&i.st==="ACTIVE").flatMap(matchesFor).sort((x,y)=>y.s-x.s)}
+
+/* ---- navigation ---- */
+function route(){
+ const h=(location.hash||"#home").slice(1);const id=["home","report","browse","matches"].includes(h)?h:"home";
+ document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));
+ document.querySelectorAll("#links a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+id));
+ if(id==="home")stats();if(id==="browse")browse();if(id==="matches")matchView();scrollTo(0,0)}
+addEventListener("hashchange",route);
+
+function stats(){
+ $("#s1").textContent=items.filter(i=>i.t==="lost").length;
+ $("#s2").textContent=items.filter(i=>i.t==="found").length;
+ $("#s3").textContent=allMatches().length;
+ $("#s4").textContent=items.filter(i=>i.st==="RETURNED"||i.st==="CLAIMED").length}
+
+/* ---- report form ---- */
+let mode="lost";
+function form(){
+ const L=mode==="lost";
+ $("#f").innerHTML=`
+ <label>Item name<input name="name"><span class="err"></span></label>
+ <label>Category<select name="cat">${CATS.map(c=>`<option>${c}</option>`).join("")}</select></label>
+ <label class="full">Description<textarea name="desc" rows="2" placeholder="colour, brand, marks, what’s inside"></textarea><span class="err"></span></label>
+ <label>${L?"Where did you lose it?":"Where did you find it?"}<input name="loc"><span class="err"></span></label>
+ <label>Date<input name="date" type="date"><span class="err"></span></label>
+ <label>${L?"Your name":"Finder name"}<input name="p1"><span class="err"></span></label>
+ <label>${L?"Your phone or email":"Stored at (e.g. Security Office)"}<input name="p2"><span class="err"></span></label>
+ <div class="full"><button class="btn" type="submit" style="margin:6px 0 0">Submit ${mode} item</button></div>`}
+$("#bl").onclick=()=>{mode="lost";$("#bl").classList.add("on");$("#bf").classList.remove("on");form()};
+$("#bf").onclick=()=>{mode="found";$("#bf").classList.add("on");$("#bl").classList.remove("on");form()};
+$("#f").addEventListener("submit",async e=>{
+ e.preventDefault();const f=e.target,v=n=>f.elements[n].value.trim(),er={};
+ if(!v("name"))er.name="Required";
+ if(!v("desc"))er.desc="Required";
+ if(!v("loc"))er.loc="Required";
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(v("date")))er.date="Pick a valid date";
+ if(!v("p1"))er.p1="Required";
+ if(mode==="lost"?!(/^\d{10}$/.test(v("p2"))||/^[\w.+-]+@[\w-]+(\.[\w-]+)+$/.test(v("p2"))):!v("p2"))er.p2=mode==="lost"?"10-digit phone or valid email":"Required";
+ f.querySelectorAll("label").forEach(l=>{const i=l.querySelector("[name]"),s=l.querySelector(".err");if(i&&s)s.textContent=er[i.name]||""});
+ if(Object.keys(er).length)return;
+ let it;
+ if(online){
+  try{it=await api("POST","/api/items",{type:mode,name:v("name"),cat:v("cat"),desc:v("desc"),loc:v("loc"),date:v("date"),p1:v("p1"),p2:v("p2")});await sync();it=items.find(i=>i.id===it.id)||it}
+  catch(x){toast(x.message);return}
+ }else{
+  const p=mode==="lost"?"L":"F";
+  const n=Math.max(0,...items.filter(i=>i.id[0]===p).map(i=>+i.id.slice(1)))+1;
+  it={t:mode,id:p+n,name:v("name"),cat:v("cat"),desc:v("desc"),loc:v("loc"),date:v("date"),st:"ACTIVE",p1:v("p1"),p2:v("p2")};
+  items.push(it);save()}
+ const m=mode==="lost"?matchesFor(it).length:0;
+ toast(m?`Saved as ${it.id} – ${m} possible match${m>1?"es":""} found!`:`Saved as ${it.id}`);
+ form();if(m){location.hash="#matches";setTimeout(()=>{$("#ms").value=it.id;matchView(it.id)},50)}});
+
+/* ---- browse ---- */
+$("#fc").innerHTML='<option value="">All categories</option>'+CATS.map(c=>`<option>${c}</option>`).join("");
+["ft","fc","fl","fk"].forEach(i=>$("#"+i).addEventListener("input",browse));
+function card(i){return `<div class="card"><span class="pill ${i.t}">${i.t}</span> <span class="pill">${esc(i.st)}</span>
+ <h3>${esc(i.name)}</h3><p>${esc(i.desc)}</p>
+ <div class="meta">${esc(i.cat)} · ${esc(i.loc)} · ${esc(i.date)} · ID ${esc(i.id)}</div>
+ <div class="who">${i.t==="lost"?"Owner: "+esc(i.p1)+" ("+esc(i.p2)+")":"Found by "+esc(i.p1)+" · Collect from "+esc(i.p2)}</div>
+ <div class="acts"><button data-a="CLAIMED" data-id="${i.id}">Claimed</button><button data-a="RETURNED" data-id="${i.id}">Returned</button><button data-a="DEL" data-id="${i.id}">Delete</button></div></div>`}
+function browse(){
+ const t=$("#ft").value,c=$("#fc").value,l=$("#fl").value.toLowerCase(),k=$("#fk").value.toLowerCase();
+ const r=items.filter(i=>(t==="both"||i.t===t)&&(!c||i.cat===c)&&(!l||i.loc.toLowerCase().includes(l))&&(!k||(i.name+" "+i.desc).toLowerCase().includes(k)));
+ $("#list").innerHTML=r.length?r.map(card).join(""):'<div class="empty">No items found. Try different filters.</div>'}
+$("#list").addEventListener("click",async e=>{
+ const b=e.target.closest("button");if(!b)return;const id=b.dataset.id;
+ try{
+  if(b.dataset.a==="DEL"){
+   if(!confirm("Delete item "+id+"?"))return;
+   if(online){await api("DELETE","/api/items/"+id);await sync()}else{items=items.filter(i=>i.id!==id);save()}
+   toast("Deleted "+id)}
+  else{
+   if(online){await api("PUT","/api/items/"+id+"/status",{status:b.dataset.a});await sync()}else{items.find(i=>i.id===id).st=b.dataset.a;save()}
+   toast(id+" marked "+b.dataset.a.toLowerCase())}
+ }catch(x){toast(x.message)}
+ browse()});
+
+/* ---- matches ---- */
+function matchView(sel){
+ const v=sel||$("#ms").value||"all";
+ $("#ms").innerHTML='<option value="all">All lost items</option>'+items.filter(i=>i.t==="lost").map(i=>`<option value="${i.id}">${esc(i.id)} – ${esc(i.name)}</option>`).join("");
+ $("#ms").value=items.some(i=>i.id===v)?v:"all";
+ const r=$("#ms").value==="all"?allMatches():matchesFor(items.find(i=>i.id===$("#ms").value));
+ $("#mlist").innerHTML=r.length?r.map(m=>`<div class="card"><div class="score">${m.s}<small style="font-size:16px;color:var(--mut)">/100</small></div>
+ <div class="bar"><i style="width:${m.s}%"></i></div>
+ <div class="pair"><div><span class="pill lost">Lost</span><b>${esc(m.l.name)}</b>${esc(m.l.loc)} · ${esc(m.l.date)}<br>${esc(m.l.p1)}<br>${esc(m.l.p2)}</div>
+ <div><span class="pill found">Found</span><b>${esc(m.f.name)}</b>${esc(m.f.loc)} · ${esc(m.f.date)}<br>${esc(m.f.p1)}<br>${esc(m.f.p2)}</div></div></div>`).join(""):'<div class="empty">No matches scoring 60 or above yet.</div>'}
+$("#ms").addEventListener("change",()=>matchView());
+
+form();route();sync().then(route);
+</script>
+</body>
+</html>

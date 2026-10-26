@@ -1,0 +1,59 @@
+digraph G {
+  rankdir=BT; fontname="Helvetica"; nodesep=0.35; ranksep=0.7; splines=true;
+  node [shape=record, fontname="Helvetica", fontsize=10, style=filled, fillcolor="#F3F5F8", color="#1F3A5F"];
+  edge [fontname="Helvetica", fontsize=9, color="#1F3A5F"];
+
+  JsonSerializable [label="{\<\<interface\>\>\nJsonSerializable|+ toJson() : String}", fillcolor="#FFF4D6"];
+  Item [label="{\<\<abstract\>\>\nItem|- id, name, description, location\l- category : Category\l- date : LocalDate\l- status : ItemStatus\l|+ getType() (abstract)\l+ getPartyName() (abstract)\l+ getPartyDetail() (abstract)\l+ getContactInfo() (abstract)\l+ toCsv() (abstract)\l+ displayDetails()\l+ toJson()\l}", fillcolor="#DDE8F7"];
+  LostItem [label="{LostItem|- ownerName\l- ownerContact\l|+ displayDetails()\l}"];
+  FoundItem [label="{FoundItem|- finderName\l- storedAt\l|+ displayDetails()\l}"];
+  MatchResult [label="{MatchResult  \<\<final, immutable\>\>|- lost : LostItem\l- found : FoundItem\l- score : int\l|+ compareTo()\l+ toJson()\l}"];
+  Comparable [label="{\<\<interface\>\>\nComparable\<MatchResult\>|+ compareTo()}", fillcolor="#FFF4D6"];
+  Category [label="{\<\<enum\>\>\nCategory|ELECTRONICS, BOOKS, ...}", fillcolor="#E6F4D7"];
+  ItemStatus [label="{\<\<enum\>\>\nItemStatus|ACTIVE, CLAIMED, RETURNED}", fillcolor="#E6F4D7"];
+
+  Matchable [label="{\<\<interface\>\>\nMatchable|+ calculateScore(lost, found)\l+ getName()\l}", fillcolor="#FFF4D6"];
+  WeightedMatcher [label="{WeightedMatcher|+ calculateScore()\l}"];
+  StrictMatcher [label="{StrictMatcher|+ calculateScore()  (overrides)\l}"];
+
+  Repository [label="{\<\<interface\>\>\nRepository\<T extends Item\>|+ add(T)\l+ findById(id)\l+ findAll()\l+ remove(id)\l+ nextId()\l}", fillcolor="#FFF4D6"];
+  InMemoryRepository [label="{InMemoryRepository\<T extends Item\>|- items : ArrayList\l- index : HashMap\l}"];
+  FileStorage [label="{FileStorage|+ save()\l+ loadLost()\l+ loadFound()\l}"];
+
+  ItemService [label="{ItemService|- lostRepo, foundRepo\l- storage : FileStorage\l- matcher : Matchable\l|+ reportLost() / reportFound()\l+ add(LostItem) / add(FoundItem)\l+ search(criteria) / search(keyword)\l+ findMatches(lost) / findMatches()\l+ updateStatus() / delete()\l}", fillcolor="#DDE8F7"];
+  SearchCriteria [label="{SearchCriteria|+ matches(Item)\l}"];
+  ServiceFactory [label="{ServiceFactory|+ create(folder)\l}"];
+
+  Main [label="{Main  (console)|+ main()\l}", fillcolor="#E9E9E9"];
+  ServerMain [label="{ServerMain|+ main()\l}", fillcolor="#E9E9E9"];
+  ApiServer [label="{ApiServer  (REST)|- service : ItemService\l|+ start()\l}", fillcolor="#E9E9E9"];
+
+  FindrException [label="{FindrException|extends Exception}", fillcolor="#FBE3E3"];
+  InvalidInputException [label="{InvalidInputException}", fillcolor="#FBE3E3"];
+  ItemNotFoundException [label="{ItemNotFoundException}", fillcolor="#FBE3E3"];
+  StorageException [label="{StorageException}", fillcolor="#FBE3E3"];
+
+  /* inheritance */
+  LostItem -> Item [arrowhead=empty]; FoundItem -> Item [arrowhead=empty];
+  StrictMatcher -> WeightedMatcher [arrowhead=empty];
+  InvalidInputException -> FindrException [arrowhead=empty];
+  ItemNotFoundException -> FindrException [arrowhead=empty];
+  StorageException -> FindrException [arrowhead=empty];
+  /* implements */
+  Item -> JsonSerializable [arrowhead=empty, style=dashed];
+  MatchResult -> JsonSerializable [arrowhead=empty, style=dashed];
+  MatchResult -> Comparable [arrowhead=empty, style=dashed];
+  WeightedMatcher -> Matchable [arrowhead=empty, style=dashed];
+  InMemoryRepository -> Repository [arrowhead=empty, style=dashed];
+  /* composition / uses */
+  Item -> Category [arrowhead=odiamond, label=" has-a"]; Item -> ItemStatus [arrowhead=odiamond, label=" has-a"];
+  MatchResult -> LostItem [arrowhead=odiamond]; MatchResult -> FoundItem [arrowhead=odiamond];
+  ItemService -> Repository [arrowhead=odiamond, label=" has-a (x2)"];
+  ItemService -> Matchable [arrowhead=odiamond, label=" has-a"];
+  ItemService -> FileStorage [arrowhead=odiamond];
+  ItemService -> SearchCriteria [arrowhead=vee, style=dashed, label=" uses"];
+  ApiServer -> ItemService [arrowhead=odiamond];
+  Main -> ItemService [arrowhead=vee, label=" uses"];
+  ServerMain -> ApiServer [arrowhead=vee, label=" creates"];
+  ServiceFactory -> ItemService [arrowhead=vee, style=dashed, label=" builds"];
+}
